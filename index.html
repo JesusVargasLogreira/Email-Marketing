@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lumina - Suscripción al Boletín</title>
+    <title>Cloudlet - Inicio Rápido</title>
 
     <!-- SDK de EmailJS -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
@@ -17,316 +17,632 @@
         }
 
         body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #ffffff;
-            color: #111827;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #000000;
+            color: #edf0f2;
             line-height: 1.5;
+            overflow-x: hidden;
         }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
+        /* ==========================================
+       1. ANIMACIÓN DE CARGA (SPLASH SCREEN)
+       ========================================== */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000000;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
         }
 
-        /* 1. SECCIÓN: HERO (LOGO, SALUDO Y CTA) */
-        .hero-section {
-            background: linear-gradient(135deg, #090a15 0%, #1a0b2e 50%, #2b0f54 100%);
+        .preloader-logo {
+            font-size: 38px;
+            font-weight: 800;
             color: #ffffff;
-            padding: 48px 24px 64px 24px;
-            position: relative;
+            margin-bottom: 24px;
+            letter-spacing: -1px;
+            animation: pulseLogo 1.5s ease-in-out infinite;
+        }
+
+        .preloader-logo span {
+            color: #7d85ff;
+        }
+
+        .preloader-bar-bg {
+            width: 220px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
             overflow: hidden;
         }
 
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: -100px;
-            right: -100px;
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle, rgba(79, 70, 229, 0.5) 0%, rgba(139, 92, 246, 0.2) 60%, transparent 80%);
-            filter: blur(50px);
-            border-radius: 50%;
-            pointer-events: none;
+        .preloader-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #0b00cf, #7d85ff);
+            box-shadow: 0 0 14px #7d85ff;
+            animation: fillBar 1.6s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
-        /* LOGO */
-        .brand-name {
-            font-size: 24px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            margin-bottom: 32px;
-            display: inline-block;
-            color: #ffffff;
-        }
+        @keyframes fillBar {
+            0% {
+                width: 0%;
+            }
 
-        .brand-name span {
-            color: #818cf8;
-        }
-
-        .hero-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            align-items: center;
-        }
-
-        @media (max-width: 768px) {
-            .hero-grid {
-                grid-template-columns: 1fr;
+            100% {
+                width: 100%;
             }
         }
 
-        /* SALUDO */
-        .hero-greeting {
-            font-size: 16px;
-            font-weight: 600;
-            color: #c7d2fe;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        @keyframes pulseLogo {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.9;
+            }
+
+            50% {
+                transform: scale(1.06);
+                opacity: 1;
+            }
         }
 
-        .hero-title {
-            font-size: 42px;
+        #preloader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* ==========================================
+       2. ANIMACIONES GLOBALES Y KEYFRAMES
+       ========================================== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes floatHeroImg {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-12px) rotate(0.5deg);
+            }
+        }
+
+        @keyframes breathSecondImg {
+
+            0%,
+            100% {
+                transform: scale(1);
+                filter: brightness(1);
+            }
+
+            50% {
+                transform: scale(1.02);
+                filter: brightness(1.1);
+            }
+        }
+
+        @keyframes glowBg {
+
+            0%,
+            100% {
+                opacity: 0.4;
+                transform: translateX(-50%) scale(1);
+            }
+
+            50% {
+                opacity: 0.75;
+                transform: translateX(-50%) scale(1.15);
+            }
+        }
+
+        @keyframes rotateCircle {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* SECCIÓN 1: LOGO */
+        header {
+            padding: 36px 0 16px 0;
+            text-align: center;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .brand-title {
+            font-size: 34px;
             font-weight: 800;
-            line-height: 1.1;
-            letter-spacing: -1px;
-            margin-bottom: 24px;
+            color: #ffffff;
+            letter-spacing: -0.5px;
         }
 
-        /* BOTÓN CTA Y FORMULARIO */
+        .brand-title span {
+            background: linear-gradient(90deg, #a194ff, #7d85ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* SECCIÓN 2: SALUDO & HERO */
+        .hero-section {
+            padding: 24px 0 56px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-bg-glow {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 650px;
+            height: 420px;
+            background: radial-gradient(circle, rgba(11, 0, 207, 0.55) 0%, rgba(125, 133, 255, 0.18) 50%, transparent 75%);
+            filter: blur(85px);
+            z-index: -1;
+            pointer-events: none;
+            animation: glowBg 6s ease-in-out infinite;
+        }
+
+        .hero-greeting {
+            font-size: 15px;
+            font-weight: 700;
+            color: #7d85ff;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 10px;
+            animation: fadeInUp 0.8s ease 0.2s forwards;
+        }
+
+        .hero-main-title {
+            font-size: 54px;
+            font-weight: 800;
+            color: #a194ff;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -1px;
+            animation: fadeInUp 0.8s ease 0.35s forwards;
+        }
+
+        /* IMAGEN 1: LAPTOP CON ANIMACIÓN FLOTANTE */
+        .hero-img-card {
+            position: relative;
+            max-width: 650px;
+            margin: 0 auto 36px auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 45px rgba(11, 0, 207, 0.5), 0 0 25px rgba(125, 133, 255, 0.3);
+            border: 1px solid rgba(125, 133, 255, 0.3);
+            animation: floatHeroImg 5s ease-in-out infinite;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .hero-img-card:hover {
+            box-shadow: 0 25px 60px rgba(125, 133, 255, 0.65);
+        }
+
+        .hero-img-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .hero-img-card:hover img {
+            transform: scale(1.04);
+        }
+
+        .hero-description {
+            font-size: 19px;
+            color: #edf0f2;
+            max-width: 650px;
+            margin: 0 auto 32px auto;
+            line-height: 1.5;
+            animation: fadeInUp 0.8s ease 0.5s forwards;
+        }
+
+        /* SECCIÓN 4: BOTÓN CTA Y FORMULARIO CON INTERACCIÓN ANIMADA */
         .subscribe-form {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             gap: 12px;
-            max-width: 420px;
+            max-width: 480px;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease 0.65s forwards;
         }
 
-        .input-group {
-            display: flex;
-            gap: 8px;
-        }
-
-        @media (max-width: 480px) {
-            .input-group {
+        @media (max-width: 550px) {
+            .subscribe-form {
                 flex-direction: column;
             }
         }
 
         input[type="email"] {
             flex: 1;
-            padding: 14px 18px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.1);
+            padding: 16px 22px;
+            border: 1px solid #2b0f54;
+            background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
-            border-radius: 8px;
-            font-size: 15px;
+            border-radius: 25px;
+            font-size: 16px;
             color: #ffffff;
             outline: none;
-        }
-
-        input[type="email"]::placeholder {
-            color: #9ca3af;
+            transition: all 0.3s ease;
         }
 
         input[type="email"]:focus {
-            border-color: #818cf8;
-            box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.4);
+            border-color: #7d85ff;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 20px rgba(125, 133, 255, 0.4);
+            transform: scale(1.02);
         }
 
         button[type="submit"] {
-            padding: 14px 24px;
-            background-color: #ffffff;
-            color: #090a15;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, #0b00cf, #7d85ff);
+            color: #edf0f2;
             border: none;
-            border-radius: 8px;
-            font-size: 15px;
+            border-radius: 25px;
+            font-size: 18px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             white-space: nowrap;
+            box-shadow: 0 4px 18px rgba(11, 0, 207, 0.5);
         }
 
         button[type="submit"]:hover {
-            background-color: #e0e7ff;
-            transform: translateY(-1px);
-        }
-
-        .hero-image-card {
-            width: 100%;
-            height: 320px;
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-            border-radius: 32px 32px 32px 120px;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-        }
-
-        .hero-image-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            mix-blend-mode: luminosity;
-            opacity: 0.9;
+            transform: translateY(-3px) scale(1.04);
+            box-shadow: 0 10px 30px rgba(125, 133, 255, 0.7);
         }
 
         #status-message {
-            font-size: 14px;
-            padding: 10px;
-            border-radius: 6px;
+            margin-top: 20px;
+            font-size: 15px;
+            padding: 14px 20px;
+            border-radius: 12px;
             display: none;
-            margin-top: 8px;
+            max-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 0.4s ease forwards;
         }
 
         #status-message.success {
             display: block;
-            background: rgba(16, 185, 129, 0.2);
+            background: rgba(16, 185, 129, 0.15);
             color: #34d399;
             border: 1px solid rgba(16, 185, 129, 0.4);
         }
 
         #status-message.error {
             display: block;
-            background: rgba(239, 68, 68, 0.2);
+            background: rgba(239, 68, 68, 0.15);
             color: #fca5a5;
             border: 1px solid rgba(239, 68, 68, 0.4);
         }
 
-        /* 2. SECCIÓN: CONTENIDO / BENEFICIOS */
+        /* SECCIÓN 3: CONTENIDO CON PASOS Y NUEVA IMAGEN ANIMADA */
         .content-section {
-            padding: 64px 24px;
+            padding: 48px 0 64px 0;
         }
 
-        .pill-badge {
-            display: inline-block;
-            background-color: #e0e7ff;
-            color: #3730a3;
-            font-size: 18px;
-            font-weight: 700;
-            padding: 6px 18px;
-            border-radius: 9999px;
+        .section-title {
+            font-size: 38px;
+            font-weight: 800;
+            color: #a194ff;
+            text-align: center;
             margin-bottom: 40px;
+            animation: fadeInUp 0.8s ease forwards;
         }
 
-        .features-grid {
+        .steps-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 32px;
+            gap: 24px;
+            margin-bottom: 48px;
         }
 
         @media (max-width: 768px) {
-            .features-grid {
+            .steps-grid {
                 grid-template-columns: 1fr;
             }
         }
 
-        .feature-item h3 {
-            font-size: 20px;
+        .step-item {
+            text-align: center;
+            padding: 20px;
+            background: rgba(11, 11, 24, 0.6);
+            border: 1px solid #1c1c38;
+            border-radius: 18px;
+            transition: all 0.4s ease;
+        }
+
+        .step-item:hover {
+            transform: translateY(-8px);
+            border-color: #7d85ff;
+            box-shadow: 0 10px 25px rgba(125, 133, 255, 0.2);
+        }
+
+        .number-circle {
+            width: 56px;
+            height: 56px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0 auto 16px auto;
+            background-color: #000000;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.15);
+            transition: all 0.4s ease;
+        }
+
+        .step-item:hover .number-circle {
+            border-color: #7d85ff;
+            color: #7d85ff;
+            transform: scale(1.15) rotate(12deg);
+            box-shadow: 0 0 20px rgba(125, 133, 255, 0.6);
+        }
+
+        .step-item p {
+            font-size: 16px;
+            color: #edf0f2;
+            font-weight: 600;
+        }
+
+        /* NUEVA IMAGEN DE STOCK REEMPLAZADA (EQUIPO TECH / WORKSPACE NEÓN) */
+        .user-photo-card {
+            max-width: 650px;
+            margin: 0 auto 48px auto;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(125, 133, 255, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+            animation: breathSecondImg 6s ease-in-out infinite;
+            transition: all 0.4s ease;
+        }
+
+        .user-photo-card:hover {
+            box-shadow: 0 20px 50px rgba(11, 0, 207, 0.5);
+        }
+
+        .user-photo-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.6s ease;
+        }
+
+        .user-photo-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .importance-block {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .importance-block h3 {
+            font-size: 34px;
             font-weight: 800;
-            color: #111827;
+            color: #a194ff;
             margin-bottom: 12px;
-            line-height: 1.25;
         }
 
-        .feature-item p {
-            font-size: 15px;
-            color: #4b5563;
-            line-height: 1.5;
+        .importance-block p {
+            font-size: 19px;
+            color: #edf0f2;
+            max-width: 620px;
+            margin: 0 auto;
         }
 
-        /* 3. SECCIÓN: FOOTER */
-        .footer-section {
-            background-color: #090a15;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: #9ca3af;
-            padding: 32px 24px;
+        .help-card {
+            background: linear-gradient(135deg, #0b00cf, #7d85ff);
+            border-radius: 20px;
+            padding: 44px 32px;
+            text-align: center;
+            box-shadow: 0 12px 40px rgba(11, 0, 207, 0.45);
+            transition: transform 0.3s ease;
+        }
+
+        .help-card:hover {
+            transform: scale(1.02);
+        }
+
+        .help-card h3 {
+            font-size: 34px;
+            font-weight: 800;
+            color: #edf0f2;
+            margin-bottom: 12px;
+        }
+
+        .help-card p {
+            font-size: 18px;
+            color: #edf0f2;
+            margin-bottom: 24px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .help-btn {
+            display: inline-block;
+            padding: 14px 32px;
+            background-color: #000000;
+            color: #edf0f2;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 17px;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .help-btn:hover {
+            transform: scale(1.08);
+            background-color: #111122;
+        }
+
+        /* SECCIÓN 5: FOOTER */
+        footer {
+            background: linear-gradient(180deg, #000000, #1700d2);
+            padding: 40px 0 32px 0;
+            border-top: 1px solid #1a1a3a;
             text-align: center;
             font-size: 14px;
+            color: #edf0f2;
         }
 
-        .footer-section p {
+        footer p {
             margin-bottom: 8px;
+        }
+
+        footer a {
+            color: #edf0f2;
+            text-decoration: underline;
         }
     </style>
 </head>
 
 <body>
 
-    <!-- HERO (LOGO, SALUDO Y CTA) -->
+    <!-- ANIMACIÓN DE CARGA / SPLASH SCREEN -->
+    <div id="preloader">
+        <div class="preloader-logo">Cloudlet<span>.</span></div>
+        <div class="preloader-bar-bg">
+            <div class="preloader-bar-fill"></div>
+        </div>
+    </div>
+
+    <!-- 1. LOGO -->
+    <div class="container">
+        <header>
+            <h1 class="brand-title">Cloudlet<span>.</span></h1>
+        </header>
+    </div>
+
+    <!-- 2. SALUDO & HERO (INCLUYE 4. BOTÓN CTA Y PRIMERA IMAGEN ANIMADA) -->
     <section class="hero-section">
+        <div class="hero-bg-glow"></div>
         <div class="container">
+            <p class="hero-greeting">Te damos la bienvenida a</p>
+            <h1 class="hero-main-title">Cloudlet</h1>
 
-            <!-- 1. LOGO -->
-            <div class="brand-name">Lumina<span>.</span></div>
-
-            <div class="hero-grid">
-                <div>
-                    <!-- 2. SALUDO -->
-                    <p class="hero-greeting">¡Hola! Te damos la bienvenida</p>
-                    <h1 class="hero-title">Boletín de tecnología y productividad</h1>
-
-                    <!-- 4. BOTÓN CTA Y FORMULARIO -->
-                    <form id="subscribe-form" class="subscribe-form">
-                        <div class="input-group">
-                            <input type="email" name="email" id="email" placeholder="Tu correo electrónico..." required>
-                            <button type="submit" id="submit-btn">Suscribirme gratis</button>
-                        </div>
-                        <div id="status-message"></div>
-                    </form>
-                </div>
-
-                <div class="hero-image-wrapper">
-                    <div class="hero-image-card">
-                        <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80"
-                            alt="Lumina Newsletter Team">
-                    </div>
-                </div>
+            <!-- Imagen 1: Laptop con luz neón y flotación animada -->
+            <div class="hero-img-card">
+                <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1000&q=80"
+                    alt="Laptop Cloudlet Neon">
             </div>
+
+            <p class="hero-description">
+                Qué bueno que estás aquí. La mayoría de las cuentas nuevas logra hacer algo útil por primera vez en
+                menos de cinco minutos. Así puedes lograrlo también.
+            </p>
+
+            <!-- 4. BOTÓN CTA Y FORMULARIO -->
+            <form id="subscribe-form" class="subscribe-form">
+                <input type="email" name="email" id="email" placeholder="Tu correo electrónico..." required>
+                <button type="submit" id="submit-btn">Comenzar</button>
+            </form>
+            <div id="status-message"></div>
         </div>
     </section>
 
-    <!-- 3. CONTENIDO / BENEFICIOS -->
+    <!-- 3. CONTENIDO (CON NUEVA IMAGEN REEMPLAZADA Y ANIMACIONES) -->
     <section class="content-section">
         <div class="container">
-            <div class="pill-badge">Beneficios de suscribirte</div>
+            <h2 class="section-title">Qué hacer primero</h2>
 
-            <div class="features-grid">
-                <div class="feature-item">
-                    <h3>Curaduría semanal de alto impacto</h3>
-                    <p>Filtramos las mejores noticias de innovación y herramientas digitales para ahorrarte horas de
-                        búsqueda.</p>
+            <!-- Pasos numerados 1, 2, 3 -->
+            <div class="steps-grid">
+                <div class="step-item">
+                    <div class="number-circle">1</div>
+                    <p>Conecta tu calendario</p>
                 </div>
-                <div class="feature-item">
-                    <h3>Formato directo y sin ruido digital</h3>
-                    <p>Un mensaje semanal pensado para aportar valor real sin saturar tu bandeja de entrada de spam.</p>
+                <div class="step-item">
+                    <div class="number-circle">2</div>
+                    <p>Importa tu primer proyecto</p>
                 </div>
-                <div class="feature-item">
-                    <h3>Acceso a guías y recursos exclusivos</h3>
-                    <p>Obtén plantillas, metodologías de trabajo y tutoriales prácticos disponibles solo para la
-                        comunidad.</p>
+                <div class="step-item">
+                    <div class="number-circle">3</div>
+                    <p>Invita a tu equipo</p>
                 </div>
+            </div>
+
+            <!-- NUEVA IMAGEN REEMPLAZADA: Workspace moderno en luz neón violeta con respiración animada -->
+            <div class="user-photo-card">
+                <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1000&q=80"
+                    alt="Tech Workspace Cloudlet">
+            </div>
+
+            <div class="importance-block">
+                <h3>Por qué es importante</h3>
+                <p>Las cuentas que dan este paso desde el primer día son las que más rápido encuentran su ritmo.</p>
+            </div>
+
+            <div class="help-card">
+                <h3>¿Necesitas ayuda?</h3>
+                <p>Responde a este correo y una persona real te responderá, o explora el centro de ayuda si prefieres
+                    buscar por tu cuenta.</p>
+                <a href="#" class="help-btn">Visita el centro de ayuda</a>
             </div>
         </div>
     </section>
 
     <!-- 5. FOOTER -->
-    <footer class="footer-section">
+    <footer>
         <div class="container">
-            <p>© 2026 Lumina Media Inc. Todos los derechos reservados.</p>
-            <p>Recibirás contenido semanal sin spam. Puedes cancelar tu suscripción en cualquier momento.</p>
+            <p>Recibes este correo porque te suscribiste al boletín de Cloudlet. Si no deseas recibir estos correos, <a
+                    href="#">cancela tu suscripción</a>.</p>
+            <p>© 2026 Cloudlet. Todos los derechos reservados.</p>
+            <p>Calle 123, Colonia, Ciudad, Estado C. P. 12345</p>
         </div>
     </footer>
 
     <script>
-        // CREDENCIALES CONFIGURADAS
+        // Transición del Preloader de carga
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('preloader').classList.add('fade-out');
+            }, 1600);
+        });
+
+        // Credenciales EmailJS
         const PUBLIC_KEY = "cdOZ7QjAgEG6KjNui";
         const SERVICE_ID = "service_j37octf";
         const TEMPLATE_ID = "template_h0wd6je";
 
-        // Inicializar EmailJS
         emailjs.init(PUBLIC_KEY);
 
         const form = document.getElementById('subscribe-form');
@@ -343,17 +659,17 @@
 
             emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, this)
                 .then(function () {
-                    statusMsg.textContent = "¡Gracias por suscribirte! Revisa tu correo.";
+                    statusMsg.textContent = "¡Gracias por suscribirte! Revisa tu bandeja de entrada.";
                     statusMsg.className = "success";
                     form.reset();
                 }, function (error) {
-                    statusMsg.textContent = "Ocurrió un error al procesar tu registro.";
+                    statusMsg.textContent = "Ocurrió un error al enviar la suscripción.";
                     statusMsg.className = "error";
                     console.error("EmailJS Error:", error);
                 })
                 .finally(function () {
                     submitBtn.disabled = false;
-                    submitBtn.textContent = 'Suscribirme gratis';
+                    submitBtn.textContent = 'Comenzar';
                 });
         });
     </script>
