@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumina - Suscripción al Boletín</title>
+
+    <!-- SDK de EmailJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #ffffff;
+            color: #111827;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* 1. SECCIÓN: HERO (LOGO, SALUDO Y CTA) */
+        .hero-section {
+            background: linear-gradient(135deg, #090a15 0%, #1a0b2e 50%, #2b0f54 100%);
+            color: #ffffff;
+            padding: 48px 24px 64px 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(79, 70, 229, 0.5) 0%, rgba(139, 92, 246, 0.2) 60%, transparent 80%);
+            filter: blur(50px);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* LOGO */
+        .brand-name {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 32px;
+            display: inline-block;
+            color: #ffffff;
+        }
+
+        .brand-name span {
+            color: #818cf8;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* SALUDO */
+        .hero-greeting {
+            font-size: 16px;
+            font-weight: 600;
+            color: #c7d2fe;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero-title {
+            font-size: 42px;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            margin-bottom: 24px;
+        }
+
+        /* BOTÓN CTA Y FORMULARIO */
+        .subscribe-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 420px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        @media (max-width: 480px) {
+            .input-group {
+                flex-direction: column;
+            }
+        }
+
+        input[type="email"] {
+            flex: 1;
+            padding: 14px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            font-size: 15px;
+            color: #ffffff;
+            outline: none;
+        }
+
+        input[type="email"]::placeholder {
+            color: #9ca3af;
+        }
+
+        input[type="email"]:focus {
+            border-color: #818cf8;
+            box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.4);
+        }
+
+        button[type="submit"] {
+            padding: 14px 24px;
+            background-color: #ffffff;
+            color: #090a15;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #e0e7ff;
+            transform: translateY(-1px);
+        }
+
+        .hero-image-card {
+            width: 100%;
+            height: 320px;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            border-radius: 32px 32px 32px 120px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .hero-image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            mix-blend-mode: luminosity;
+            opacity: 0.9;
+        }
+
+        #status-message {
+            font-size: 14px;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+            margin-top: 8px;
+        }
+
+        #status-message.success {
+            display: block;
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+        }
+
+        #status-message.error {
+            display: block;
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+
+        /* 2. SECCIÓN: CONTENIDO / BENEFICIOS */
+        .content-section {
+            padding: 64px 24px;
+        }
+
+        .pill-badge {
+            display: inline-block;
+            background-color: #e0e7ff;
+            color: #3730a3;
+            font-size: 18px;
+            font-weight: 700;
+            padding: 6px 18px;
+            border-radius: 9999px;
+            margin-bottom: 40px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        @media (max-width: 768px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .feature-item h3 {
+            font-size: 20px;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 12px;
+            line-height: 1.25;
+        }
+
+        .feature-item p {
+            font-size: 15px;
+            color: #4b5563;
+            line-height: 1.5;
+        }
+
+        /* 3. SECCIÓN: FOOTER */
+        .footer-section {
+            background-color: #090a15;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #9ca3af;
+            padding: 32px 24px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .footer-section p {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HERO (LOGO, SALUDO Y CTA) -->
+    <section class="hero-section">
+        <div class="container">
+
+            <!-- 1. LOGO -->
+            <div class="brand-name">Lumina<span>.</span></div>
+
+            <div class="hero-grid">
+                <div>
+                    <!-- 2. SALUDO -->
+                    <p class="hero-greeting">¡Hola! Te damos la bienvenida</p>
+                    <h1 class="hero-title">Boletín de tecnología y productividad</h1>
+
+                    <!-- 4. BOTÓN CTA Y FORMULARIO -->
+                    <form id="subscribe-form" class="subscribe-form">
+                        <div class="input-group">
+                            <input type="email" name="email" id="email" placeholder="Tu correo electrónico..." required>
+                            <button type="submit" id="submit-btn">Suscribirme gratis</button>
+                        </div>
+                        <div id="status-message"></div>
+                    </form>
+                </div>
+
+                <div class="hero-image-wrapper">
+                    <div class="hero-image-card">
+                        <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80"
+                            alt="Lumina Newsletter Team">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. CONTENIDO / BENEFICIOS -->
+    <section class="content-section">
+        <div class="container">
+            <div class="pill-badge">Beneficios de suscribirte</div>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h3>Curaduría semanal de alto impacto</h3>
+                    <p>Filtramos las mejores noticias de innovación y herramientas digitales para ahorrarte horas de
+                        búsqueda.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Formato directo y sin ruido digital</h3>
+                    <p>Un mensaje semanal pensado para aportar valor real sin saturar tu bandeja de entrada de spam.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Acceso a guías y recursos exclusivos</h3>
+                    <p>Obtén plantillas, metodologías de trabajo y tutoriales prácticos disponibles solo para la
+                        comunidad.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. FOOTER -->
+    <footer class="footer-section">
+        <div class="container">
+            <p>© 2026 Lumina Media Inc. Todos los derechos reservados.</p>
+            <p>Recibirás contenido semanal sin spam. Puedes cancelar tu suscripción en cualquier momento.</p>
+        </div>
+    </footer>
+
+    <script>
+        // CREDENCIALES CONFIGURADAS
+        const PUBLIC_KEY = "cdOZ7QjAgEG6KjNui";
+        const SERVICE_ID = "service_j37octf";
+        const TEMPLATE_ID = "template_h0wd6je";
+
+        // Inicializar EmailJS
+        emailjs.init(PUBLIC_KEY);
+
+        const form = document.getElementById('subscribe-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const statusMsg = document.getElementById('status-message');
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Enviando...';
+            statusMsg.className = '';
+            statusMsg.style.display = 'none';
+
+            emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, this)
+                .then(function () {
+                    statusMsg.textContent = "¡Gracias por suscribirte! Revisa tu correo.";
+                    statusMsg.className = "success";
+                    form.reset();
+                }, function (error) {
+                    statusMsg.textContent = "Ocurrió un error al procesar tu registro.";
+                    statusMsg.className = "error";
+                    console.error("EmailJS Error:", error);
+                })
+                .finally(function () {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Suscribirme gratis';
+                });
+        });
+    </script>
+
+</body>
+
+</html>
